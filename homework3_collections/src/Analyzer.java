@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
  * SD2x Homework #3
@@ -14,27 +15,63 @@ public class Analyzer {
 	public static List<Sentence> readFile(String filename) throws FileNotFoundException {
 
 		/* IMPLEMENT THIS METHOD! */
-		File f = new File(filename);
-		BufferedReader b = new BufferedReader(new FileReader(f));
-		String readline = "";
 		System.out.println("reading file using buffered reader");
 
-		List<String> strings = new ArrayList<>();
+		List<Sentence> sentences = new ArrayList<>();
 
-		try {
-			while ((readline = b.readLine()) != null){
-                strings.add(readline);
+		List<String> lines = readFileIntoListStrings(filename);
+		lines = lines.stream().filter(s -> !s.isEmpty())
+                .filter(s -> !s.equals("\n"))
+                .filter(s -> !s.equals(""))
+                .filter(s -> !s.equals(" "))
+                .collect(Collectors.toList());
+
+		for (String line1: lines){
+
+            int score;
+		    try {
+                score = Integer.parseInt(line1.substring(0,1));
+                Sentence sentence = new Sentence(score, line1.substring(2));
+                sentences.add(sentence);
+
             }
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            catch (NumberFormatException ex){
+                continue;
+            }
+
+        }
 
 		//FIXME
 		//pass strings in strings to Sentence objects
-		return null; // this line is here only so this code will compile if you don't modify it
+		return sentences; // this line is here only so this code will compile if you don't modify it
 
 	}
-	
+
+	public static List<String> readFileIntoListStrings(String filename) throws FileNotFoundException {
+
+	    /* IMPLEMENT THIS METHOD! */
+        File f = new File(filename);
+        BufferedReader b = new BufferedReader(new FileReader(f));
+        String readline = "";
+        System.out.println("reading file using buffered reader");
+
+        List<String> strings = new ArrayList<>();
+
+        try {
+            while ((readline = b.readLine()) != null){
+                    //strings.add(readline);
+                    strings.add(readline);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //FIXME
+        //pass strings in strings to Sentence objects
+        return strings; // this line is here only so this code will compile if you don't modify it
+
+    }
+
 	/*
 	 * Implement this method in Part 2
 	 */
@@ -72,7 +109,7 @@ public class Analyzer {
 	 * This method is here to help you run your program. Y
 	 * You may modify it as needed.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		if (args.length == 0) {
 			System.out.println("Please specify the name of the input file");
 			System.exit(0);

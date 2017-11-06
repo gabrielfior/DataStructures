@@ -5,8 +5,6 @@ import org.junit.runners.JUnit4;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by gabrielfior on 25.09.17.
  */
@@ -16,8 +14,21 @@ public class AnalyzerTest {
     public void readFile() throws Exception {
 
         Analyzer analyzer = new Analyzer();
-        String filename = "test1.txt";
+        String filename = "resources/test5.txt";
         List<Sentence> file1 = analyzer.readFile(filename);
+
+        System.out.println("debug");
+
+    }
+
+    @Test
+    public void testReadFileEasy() throws Exception {
+
+        Analyzer analyzer = new Analyzer();
+        String filename = "resources/test1.txt";
+        List<String> file1 = analyzer.readFileIntoListStrings(filename);
+
+        System.out.println("debug");
 
 
     }
